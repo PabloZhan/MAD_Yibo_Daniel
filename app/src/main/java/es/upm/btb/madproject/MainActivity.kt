@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG, "onCreate: Starting maing activity.")
+        Log.d(TAG, "onCreate: Starting main activity.")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -59,7 +59,19 @@ class MainActivity : AppCompatActivity(), LocationListener {
             // whichever happens first
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
         }
-
+        setContentView(R.layout.activity_main)
+        val buttonOsm: Button = findViewById(R.id.osmButton)
+        buttonOsm.setOnClickListener {
+            if (latestLocation != null) {
+                val intent = Intent(this, OpenStreetMapsActivity::class.java)
+                val bundle = Bundle()
+                bundle.putParcelable("location", latestLocation)
+                intent.putExtra("locationBundle", bundle)
+                startActivity(intent)
+            }else{
+                Log.e(TAG, "Location not set yet.")
+            }
+        }
         // Set up button click listener
         val navigateButton: Button = findViewById(R.id.navigateButton)
         navigateButton.setOnClickListener {
